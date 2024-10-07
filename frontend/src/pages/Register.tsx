@@ -96,7 +96,7 @@ const Register = () => {
                   if (response.success) {
                     navigate("/login");
                   } else {
-                    toast.error(response.error);
+                    toast.error(response.message);
                   }
                   setSubmitting(false);
                 }}
@@ -221,7 +221,7 @@ const Register = () => {
                   to="/login"
                   className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                 >
-                  Login back!
+                  Please Login back!
                 </Link>
               </p>
             </div>

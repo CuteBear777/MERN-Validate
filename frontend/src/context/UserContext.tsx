@@ -10,9 +10,9 @@ type Context = {
     registerUser: (email: string, username: string, password: string) => Promise<ApiResponse>;
     modifyUser: (userData: any) => Promise<ApiResponse>;
     getAllUsers: () => Promise<ApiResponse>;
-    deleteUser: (userId:any) => Promise<ApiResponse>;
+    deleteUser: (userId:string) => Promise<ApiResponse>;
     getMe: () => Promise<ApiResponse>;
-    setUser: (user: User) => void;
+    setUser: (user: User | null) => void;
 }
 
 const UserContext = createContext<Context>({} as Context);
@@ -32,7 +32,7 @@ export const UserProvider = ({children}: {children: React.ReactNode}) => {
         return await apiPost(`/api/users/modify/${userData?.userId}`, userData);
     }
 
-    const deleteUser = async(userId: any) => {
+    const deleteUser = async(userId: string) => {
         return await apiPost(`/api/users/delete/${userId}`, "");
     }
 

@@ -11,7 +11,6 @@ const UserManagement = () => {
         const response = await getAllUsers();
         
         if(response.success) setUsers(response.data);
-        // setUsers(userList);
     };
 
     

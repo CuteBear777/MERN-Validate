@@ -6,30 +6,9 @@ import { apiPost } from '../service';
 import { toast } from 'react-toastify';
 
 const ModifyUser = () => {
-    const { id } = useParams();
-    const { user, modifyUser } = useUserContext();
-    const [email, setEmail] = useState(user!.email);
-    const [password, setPassword] = useState('');
-    const [confirm, setConfirm] = useState('');
+    const { user} = useUserContext();
 
     const navigate = useNavigate();
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     const userData = {
-    //         userId: user?._id,
-    //         userName: user?.username,
-    //         email: email,
-    //         password: password
-    //     }
-
-    //     await apiPost(`/api/users/modify:${user?.id}`,userData);
-    //     // Redirect or show success message
-    // };
-
-    useEffect(() => {
-        // Fetch user data by ID to populate the form
-    }, [id]);
 
     return (
         // <form onSubmit={handleSubmit}>
@@ -98,7 +77,7 @@ const ModifyUser = () => {
                         toast.success("Update Success! Your information changed.");
                         navigate("/login");
                       } else {
-                        toast.error(response.error);
+                        toast.error(response.message);
                       }
                       
 

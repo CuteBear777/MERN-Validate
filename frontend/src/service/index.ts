@@ -1,11 +1,9 @@
 import axios, { isAxiosError } from "axios";
-import { ToastContent } from "react-toastify";
 
 export type ApiResponse = {
   success: true,
   data: any
 } | {
-  // error: ToastContent<unknown>;
   success: false,
   message: string;
 }
