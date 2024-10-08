@@ -1,12 +1,10 @@
 import React, {createContext, useContext, useState} from 'react';
-
-// import axios from 'axios';
 import { apiGet, apiPost, apiPut, ApiResponse } from '../service'
-import { isAxiosError } from 'axios';
 
 type Context = {
     user: User | null,
     loginUser: (email: string, password: string) => Promise<ApiResponse>;
+    verifyToken: (token: string) => Promise<ApiResponse>;
     registerUser: (email: string, username: string, password: string) => Promise<ApiResponse>;
     modifyUser: (userData: any) => Promise<ApiResponse>;
     getAllUsers: () => Promise<ApiResponse>;
@@ -19,6 +17,10 @@ const UserContext = createContext<Context>({} as Context);
 
 export const UserProvider = ({children}: {children: React.ReactNode}) => {
     const [user, setUser] = useState<User | null>(null);
+
+    const verifyToken = async(token) => {
+        return await apiPost('/api/users/verifyToken', token);
+    }
 
     const registerUser = async(email, username, password) => {
         return await apiPost('/api/users/register', {email, username, password});
@@ -44,7 +46,7 @@ export const UserProvider = ({children}: {children: React.ReactNode}) => {
         return await apiGet('/api/users/me');
     }
     return(
-        <UserContext.Provider value={{user, registerUser, loginUser, modifyUser, deleteUser, getAllUsers, setUser, getMe}}>
+        <UserContext.Provider value={{user, verifyToken, registerUser, loginUser, modifyUser, deleteUser, getAllUsers, setUser, getMe}}>
             {children}
         </UserContext.Provider>
     );

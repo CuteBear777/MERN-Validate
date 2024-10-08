@@ -22,24 +22,40 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
-        console.log("sdkfsdfsdf" +  email);
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ noUser: true, message: 'Invalid credentials' });
+        if (!user) return res.status(404).json({ success: false, message: 'User not exists!' });
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ noPwd: true, message: 'Invalid Password' });
+        if (!isMatch) return res.status(404).json({ success: false, message: 'Password Incorrect!' });
 
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET);
-        res.json({ token, user });
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET,{expiresIn: '1h'});
+        
+        // return res.json({ success: true, token});
+        return res.json({token,user});
     } catch (error) {
-        res.status(500).json({ message: 'Error logging in' });
+        return res.status(500).json({ message: 'Server logging causes ErrorS!' });
     }
 };
+
+const verifyToken = async(req,res) => {
+        const token = req.body.token;
+        if(!token) return res.status(403).json({success:false,  message:'Token required'});
+        const secretKey = process.env.jwt || "your-secret-key";
+        jwt.verify(token, secretKey, async (err, decoded)=>{
+            if(err){
+                console.log(err);
+                return res.status(401).json({success:false, message:'Invalid or expired token'});
+            } 
+            else{
+                const user = await User.findById(decoded.id);
+                return res.json({success:true, user});
+            }
+        });
+}
 
 // Modify User Information
 const modifyUser = async (req, res) => {
     const { id } = req.params;
-    // const { username, email, password } = req.body;
     const data = req.body;
 
     try {
@@ -98,6 +114,7 @@ const getMe = async (req, res) => {
 module.exports = {
     registerUser,
     loginUser,
+    verifyToken,
     modifyUser,
     delUser,
     getAllUsers,

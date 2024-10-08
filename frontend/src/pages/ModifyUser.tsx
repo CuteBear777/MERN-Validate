@@ -11,12 +11,6 @@ const ModifyUser = () => {
     const navigate = useNavigate();
 
     return (
-        // <form onSubmit={handleSubmit}>
-        //     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
-        //     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="New Password" />
-        //     <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Confirm" />
-        //     <button type="submit">Update User</button>
-        // </form>
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-144px)]">
           <div className="container px-5 md:px-10 xl:px-14 mx-auto">
             <div className="sm:mx-auto w-full sm:max-w-sm">
@@ -53,25 +47,12 @@ const ModifyUser = () => {
                   if (values.password !== values.confirm) {
                     errors.confirm = "Passwords do not match";
                   }
-                //   else if (
-                //     !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/.test(
-                //       values.password
-                //     )
-                //   ) {
-                //     errors.password = "Invalid password";
-                //   }
                 if (!values.confirm) {
                     errors.confirm = "Required";
                   } 
                   return errors;
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
-
-                    // if(password!=confirm) {setPassword(""); setConfirm(""); setTip("Confirm is incorrect!")}
-                    // else {
-                    //     const response = await registerUser(email, username, password );
-                    //     if(response.success) navigate('/login');
-                    // }
                     const response = await apiPost(`/api/users/modify/${user?._id}`,values);
                     if (response.success) {
                         toast.success("Update Success! Your information changed.");
@@ -79,8 +60,6 @@ const ModifyUser = () => {
                       } else {
                         toast.error(response.message);
                       }
-                      
-
                 }}
               >
                 {({

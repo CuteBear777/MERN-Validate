@@ -3,23 +3,13 @@ import { useUserContext } from "../context/UserContext";
 
 import{
     ArrowLeftStartOnRectangleIcon,
-    Cog8ToothIcon,
 } from "@heroicons/react/24/outline";
 
-import {apiGet} from "../service"
 import React from "react";
 
 export default function Header() {
     const {user, setUser} = useUserContext();
     const navigate = useNavigate();
-
-    // const logout = async () => {
-    //     const response  = await apiGet("/auth/logout");
-    //     if(response.success) {
-    //         setUser(null);
-    //         navigate("/login");
-    //     }
-    // };
 
     const handleClick = async (e) => {
         e.preventDefault();

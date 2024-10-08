@@ -20,7 +20,6 @@ const UserManagement = () => {
 
 
     const delUser = async (userId: string) => {
-        console.log("userId--->", userId)
 
         const response = await deleteUser(userId);
 

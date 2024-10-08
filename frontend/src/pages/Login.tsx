@@ -1,44 +1,12 @@
-import React, {useState} from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { Form, Formik } from "formik";
-import { toast } from "react-toastify";
-import { apiGet, apiPost } from "../service";
+import { apiPost } from "../service";
 
 const Login = () =>{
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [err, setErrorMsg] = useState('');
-    const [errPwd, setErrorPwd] = useState('');
-
-    const {loginUser} = useUserContext();
-
     const navigate = useNavigate();
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     const response = await loginUser(email, password);
-    //     if (response.success) {
-    //         window.localStorage.setItem('token', (response.data as {token: string}).token)
-    //         navigate("/");
-    //     } else {
-    //         setErrorMsg(response.message);
-    //     }
-    // };
-
-    // return(
-    //     <form onSubmit={handleSubmit}>
-    //         <input type = "email" value = {email} onChange={(e)=>setEmail(e.target.value)} placeholder="Email" required/>
-    //         {err && (
-    //             <p>{err}</p>
-    //         )}
-    //         <input type = 'password' value={password} onChange={(e)=>setPassword(e.target.value)} placeholder="Password" required />
-    //         {errPwd && (
-    //             <p>{errPwd}</p>
-    //         )}
-    //         <button type = "submit">Login</button>
-    //         <Link to="/register">Register</Link>
-    //     </form>
-    // );
+    const {user, setUser} = useUserContext();
     return (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-144px)]">
           <div className="container px-5 md:px-10 xl:px-14 mx-auto">
@@ -66,23 +34,18 @@ const Login = () =>{
                   if (!values.password) {
                     errors.password = "Required";
                   } 
-                //   else if (
-                //     !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/.test(
-                //       values.password
-                //     )
-                //   ) {
-                //     errors.password = "Invalid password";
-                //   }
                   return errors;
                 }}
                 onSubmit={async (values, { setSubmitting }) => {
-                    console.log("asdfasdf"+values);
                   const response = await apiPost("/api/users/login",values);
                   if (response.success) {
-                    window.localStorage.setItem('token', (response.data as {token: string}).token)
+                    // window.localStorage.setItem('token', (response.data as {token: string}).token)
+                    localStorage.setItem('token', response.data.token as string);
+                    console.log(response.data);
+                    setUser(response.data.user);
                     navigate("/");
                   } else {
-                    toast.error(response.error);
+                    // toast.error(response.message);
                   }
                   setSubmitting(false);
                 }}
