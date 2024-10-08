@@ -1,45 +1,40 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
+import { apiPost } from "../service";
 
 const Home  = () => {
-    const navigate = useNavigate();
     const { user, getMe, setUser } = useUserContext();
+    const [isloggedin, setIsLoggedIn] = useState(false);
 
-    // const handleClick = async (e) => {
-    //     e.preventDefault();
-    //     window.localStorage.removeItem('token');
-    //     navigate('/login');
-    // };
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        (async () => {
-            if(!user) {
-                const response = await getMe();
-                if (response.success) {
-                    setUser(response.data as User);
-                } else {
-                    navigate('/login');
-                }
-            }
-        })()
-    }, []);
+    const verifyToken = async() => {
+        const token = localStorage.getItem('token');
+        
+        console.log(token);
+        const response = await apiPost('/api/users/verifyToken', {token: token});
+        if(response.success) {
+            setIsLoggedIn(true);
+            setUser(response.data as User);
+            if(user?.role == "user") navigate(`/modify/:${user._id}`);
+            else navigate("/allusers");
+        }
+        else{
+            localStorage.removeItem('token');
+            navigate('/login');
+        }
+    }
 
+    if(!isloggedin){
+        useEffect(() => {
+            verifyToken();
+        }, []);
+    }
+    
 
 
     return (
-        // <div>
-        //     {user?.role == 'admin' ? 
-        //     (
-        //         <div>
-        //             <Link to='/allusers'>User Management</Link>
-        //         </div>
-        //     ):(
-        //         <div>
-        //             <Link to={`/modify/${user?._id}`}>Modify User</Link>
-        //         </div>
-        //     )}
-        // </div>
         <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">

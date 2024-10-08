@@ -9,7 +9,6 @@ import React from "react";
 export default function Layout() {
   const { user, getMe } = useUserContext();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     (async () => {
@@ -17,11 +16,8 @@ export default function Layout() {
         const success = await getMe();
         if (!success) navigate("/login");
       }
-      setIsLoading(false);
     })();
   }, []);
-
-  // if (isLoading) return null;
 
   return (
     <>

@@ -13,7 +13,7 @@ app.use(
       credentials: true,
       allowedHeaders: ["Content-Type", "Authorization"],
     })
-  );
+);
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI, {
